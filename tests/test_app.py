@@ -7,5 +7,5 @@ def test_view_blog_posts(client):
 def test_create_new_blog_post(client):
     response = client.post("/blog/")
     assert response.status_code == 201
-    assert response.json.id is not None
-    assert response.json.type == "blog"
+    assert response.json["id"] is not None
+    assert response.json["type"] == "blog"

@@ -14,6 +14,9 @@ bp = Blueprint("blog", __name__, url_prefix="/blog")
     ),
 )
 def blog_post():
-    if request.method != "GET":
-        return {"error": "method not allowed"}, 406
-    return jsonify([{"posts": {"title": "My first POST"}}]), 200
+    if request.method == "GET":
+        return jsonify({"posts": [{"title": "My first POST"}]}), 200
+    elif request.method == "POST":
+        return {"id": -1, "type": "blog"}, 201
+
+    return {"error": "method not allowed"}, 406
