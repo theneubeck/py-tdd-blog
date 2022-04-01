@@ -3,8 +3,6 @@ import json
 
 from flask import Blueprint, jsonify, request
 
-# from werkzeug.security import check_password_hash, generate_password_hash
-
 bp = Blueprint("blog", __name__, url_prefix="/blog")
 
 
