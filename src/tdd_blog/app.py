@@ -22,15 +22,12 @@ def blog_post():
         return {"id": 1, "type": "post"}, 201
     return {"error": "method not allowed"}, 406
 
+
 @bp.route(
     "/1",
-    methods=(
-        "GET",
-    ),
+    methods=("GET",),
 )
 def blog_post_by_id():
     if request.method == "GET":
-        return jsonify({"title": "hey","id": 1, "type":"post", "body": "baberiba"}), 200
+        return jsonify({"title": "hey", "id": 1, "type": "post", "body": "baberiba"}), 200
     return {"error": "method not allowed"}, 406
-
-

@@ -1,6 +1,7 @@
 import pytest
 
-from tdd_blog import create_app, db
+from tdd_blog import create_app
+from tdd_blog import db as database
 
 
 @pytest.fixture()
@@ -16,7 +17,7 @@ def app():
 
     yield app
 
-    db.clear()
+    database.clear()
     # clean up / reset resources here
 
 
@@ -28,3 +29,10 @@ def client(app):
 @pytest.fixture()
 def runner(app):
     return app.test_cli_runner()
+
+
+@pytest.fixture()
+def db():
+    database.clear()
+    yield database
+    database.clear()
