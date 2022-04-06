@@ -76,3 +76,10 @@ def test_update_blog_post_body(client):
     assert response.status_code == 200
     response = client.get(f"/blog/{creation.json['id']}")
     assert response.json["body"] == f"a new title {valid_body}"
+
+
+def test_update_missing_blog_post(client):
+    response = client.put(
+        f"/blog/2698a490-5fa2-4736-a674-3db24fd10f1d", json={"title": "hey", "body": f"a new title {valid_body}"}
+    )
+    assert response.status_code == 404
