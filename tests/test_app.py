@@ -1,5 +1,9 @@
 # helpers
+from pydoc import cli
+
 valid_body = "bodyz " * 10
+
+
 def create_blog_post(client, body=None):
     body = body or {"title": "hey", "body": valid_body}
     response = client.post("/blog/", json=body)
@@ -55,3 +59,20 @@ def test_create_with_missing_body(client):
     response = client.post("/blog/", json={})
     assert response.status_code == 400
     assert response.json["errors"] == [{"body": "is required", "title": "is required"}]
+
+
+# edit
+def test_update_blog_post_title(client):
+    creation = create_blog_post(client, {"title": "hey", "body": valid_body})
+    response = client.put(f"/blog/{creation.json['id']}", json={"title": "a new title", "body": valid_body})
+    assert response.status_code == 200
+    response = client.get(f"/blog/{creation.json['id']}")
+    assert response.json["title"] == "a new title"
+
+
+def test_update_blog_post_body(client):
+    creation = create_blog_post(client, {"title": "hey", "body": valid_body})
+    response = client.put(f"/blog/{creation.json['id']}", json={"title": "hey", "body": f"a new title {valid_body}"})
+    assert response.status_code == 200
+    response = client.get(f"/blog/{creation.json['id']}")
+    assert response.json["body"] == f"a new title {valid_body}"
