@@ -83,3 +83,13 @@ def test_update_missing_blog_post(client):
         f"/blog/2698a490-5fa2-4736-a674-3db24fd10f1d", json={"title": "hey", "body": f"a new title {valid_body}"}
     )
     assert response.status_code == 404
+
+
+def test_update_blog_post_with_missing_body(client):
+    creation = create_blog_post(client, {"title": "hey", "body": valid_body})
+    response = client.put(f"/blog/{creation.json['id']}", json={})
+    assert response.status_code == 400
+    assert response.json["errors"] == [{"body": "is required", "title": "is required"}]
+    response = client.get(f"/blog/{creation.json['id']}")
+    assert response.json["body"] == valid_body
+    assert response.json["title"] == "hey"
