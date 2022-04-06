@@ -11,13 +11,13 @@ bp = Blueprint("blog", __name__, url_prefix="/blog")
 
 
 def write_to_db(id: str, body: Dict) -> None:
+    body["id"] = id
+    body["type"] = "post"
     db.set(id, body)
 
 
 def create_blog_post(body: Dict) -> str:
     guid = str(uuid.uuid4())
-    body["id"] = guid
-    body["type"] = "post"
     write_to_db(guid, body)
     return guid
 
@@ -63,6 +63,7 @@ def blog_post_by_id(id: str):
         errors = validate_blog_post(request.json)
         if errors:
             return errors, 400
+
         if db.get(id):
             write_to_db(id, request.json)
             return {}, 200
