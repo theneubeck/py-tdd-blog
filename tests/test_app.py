@@ -7,6 +7,12 @@ def create_blog_post(client, body=None):
 
 
 # tests
+def test_view_empty_index(client):
+    response = client.get("/blog/")
+    assert response.status_code == 200
+    assert response.json == {"posts": []}
+
+
 def test_view_blog_posts(client):
     creation = create_blog_post(client, {"title": "hey", "body": "baberiba"})
     response = client.get("/blog/")
