@@ -1,8 +1,9 @@
 import functools
+
 from . import db
 import json
 import uuid
-from typing import Dict
+from typing import Dict, Optional
 
 from flask import Blueprint, jsonify, request
 
@@ -20,6 +21,16 @@ def create_blog_post(body: Dict) -> str:
     write_to_db(guid, body)
     return guid
 
+def validate_blog_post(post: Dict) -> Optional[Dict]:
+    if not post:
+        return {"errors": [{"title": "is required", "body": "is required"}]}
+    if "title" not in post:
+        return {"errors": [{"title": "is required"}]}
+    if "body" not in post:
+        return {"errors": [{"body": "is required"}]}
+    if len(post["body"]) < 50:
+        return {"errors": [{"body": "must be at least 50 chars"}]}
+
 
 @bp.route(
     "/",
@@ -32,12 +43,9 @@ def blog_post():
     if request.method == "GET":
         return {"posts": list(db.values())}, 200
     elif request.method == "POST":
-        if not request.json:
-            return {"errors": [{"title": "is required", "body": "is required"}]}, 400
-        if "title" not in request.json:
-            return {"errors": [{"title": "is required"}]}, 400
-        if len(request.json["body"]) < 50:
-            return {"errors": [{"body": "must be at least 50 chars"}]}, 400
+        errors = validate_blog_post(request.json)
+        if errors:
+            return errors, 400
 
         body = request.json
         return {"id": create_blog_post(body), "type": "post"}, 201
@@ -52,6 +60,9 @@ def blog_post_by_id(id: str):
     if request.method == "GET":
         return db.get(id), 200
     elif request.method == "PUT":
+        errors = validate_blog_post(request.json)
+        if errors:
+            return errors, 400
         if db.get(id):
             write_to_db(id, request.json)
             return {}, 200
