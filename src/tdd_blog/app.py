@@ -52,8 +52,11 @@ def blog_post_by_id(id: str):
     if request.method == "GET":
         return db.get(id), 200
     elif request.method == "PUT":
-        write_to_db(id, request.json)
-        return {}, 200
+        if db.get(id):
+            write_to_db(id, request.json)
+            return {}, 200
+        else:
+            return {}, 404
     return {"error": "method not allowed"}, 406
 
 @bp.route(
