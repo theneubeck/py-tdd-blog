@@ -46,7 +46,7 @@ def test_create_with_missing_title(client):
 
 
 def test_create_with_missing_too_short_body(client):
-    response = client.post("/blog/", json={"title": "my-title", body: "too short"})
+    response = client.post("/blog/", json={"title": "my-title", "body": "too short"})
     assert response.status_code == 400
     assert response.json["errors"] == [{"body": "must be at least 50 chars"}]
 

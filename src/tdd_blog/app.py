@@ -19,8 +19,13 @@ def blog_post():
     if request.method == "GET":
         return {"posts": list(db.values())}, 200
     elif request.method == "POST":
+        if not request.json:
+            return {"errors": [{"title": "is required", "body": "is required"}]}, 400
         if "title" not in request.json:
             return {"errors": [{"title": "is required"}]}, 400
+        if len(request.json["body"]) < 50:
+            return {"errors": [{"body": "must be at least 50 chars"}]}, 400
+
         body = request.json
         guid = str(uuid.uuid4())
         body["id"] = guid
