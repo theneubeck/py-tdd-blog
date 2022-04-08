@@ -59,7 +59,9 @@ def blog_post():
 )
 def blog_post_by_id(id: str):
     if request.method == "GET":
-        return db.get(id), 200
+        if db.get(id):
+            return db.get(id), 200
+        return {}, 404
     elif request.method == "PUT":
         errors = validate_blog_post(request.json)
         if errors:
@@ -71,6 +73,7 @@ def blog_post_by_id(id: str):
         else:
             return {}, 404
     elif request.method == "DELETE":
+        db.delete(id)
         return {}, 200
     return {"error": "method not allowed"}, 406
 
