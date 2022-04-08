@@ -1,11 +1,11 @@
 import functools
-
-from . import db
 import json
 import uuid
 from typing import Dict, Optional
 
 from flask import Blueprint, jsonify, request
+
+from . import db
 
 bp = Blueprint("blog", __name__, url_prefix="/blog")
 
@@ -20,6 +20,7 @@ def create_blog_post(body: Dict) -> str:
     guid = str(uuid.uuid4())
     write_to_db(guid, body)
     return guid
+
 
 def validate_blog_post(post: Dict) -> Optional[Dict]:
     if not post:
@@ -54,7 +55,7 @@ def blog_post():
 
 @bp.route(
     "/<id>",
-    methods=("GET","PUT"),
+    methods=("GET", "PUT", "DELETE"),
 )
 def blog_post_by_id(id: str):
     if request.method == "GET":
@@ -69,7 +70,10 @@ def blog_post_by_id(id: str):
             return {}, 200
         else:
             return {}, 404
+    elif request.method == "DELETE":
+        return {}, 200
     return {"error": "method not allowed"}, 406
+
 
 @bp.route(
     "/post/<id>",
