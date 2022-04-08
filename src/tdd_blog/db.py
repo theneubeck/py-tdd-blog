@@ -20,3 +20,7 @@ def get(id):
 
 def items():
     return __db.items()
+
+
+def values():
+    return __db.values()

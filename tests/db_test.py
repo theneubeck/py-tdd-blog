@@ -17,3 +17,11 @@ def test_items(db):
     assert list(db.items()) == [
         ("12", "hej"),
     ]
+
+
+def test_values(db):
+    assert list(db.values()) == []
+    db.set("12", "hej")
+    assert list(db.values()) == [
+        ("hej"),
+    ]
