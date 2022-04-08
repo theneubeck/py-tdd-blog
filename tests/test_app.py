@@ -108,3 +108,10 @@ def test_update_blog_post_with_missing_body(client):
     response = client.get(f"/blog/{creation.json['id']}")
     assert response.json["body"] == valid_body
     assert response.json["title"] == "hey"
+
+
+# Delete
+def test_delete_blog_post(client):
+    creation = create_blog_post(client, {"title": "Delete me", "body": valid_body})
+    response = client.delete(f"/blog/{creation.json['id']}")
+    assert response.status_code == 200
