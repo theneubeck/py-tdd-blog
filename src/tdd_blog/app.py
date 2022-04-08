@@ -10,6 +10,15 @@ from . import db
 bp = Blueprint("blog", __name__, url_prefix="/blog")
 
 
+def check_exist(func):
+    def wrapper(id, *args, **kwargs):
+        if not db.get(id):
+            return {}, 404
+        return func(id, *args, **kwargs)
+
+    return wrapper
+
+
 def write_to_db(id: str, body: Dict) -> None:
     body["id"] = id
     body["type"] = "post"
@@ -57,21 +66,17 @@ def blog_post():
     "/<id>",
     methods=("GET", "PUT", "DELETE"),
 )
+@check_exist
 def blog_post_by_id(id: str):
     if request.method == "GET":
-        if db.get(id):
-            return db.get(id), 200
-        return {}, 404
+        return db.get(id), 200
     elif request.method == "PUT":
         errors = validate_blog_post(request.json)
         if errors:
             return errors, 400
 
-        if db.get(id):
-            write_to_db(id, request.json)
-            return {}, 200
-        else:
-            return {}, 404
+        write_to_db(id, request.json)
+        return {}, 200
     elif request.method == "DELETE":
         db.delete(id)
         return {}, 200
