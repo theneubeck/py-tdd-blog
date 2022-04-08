@@ -117,3 +117,11 @@ def test_delete_blog_post(client):
     assert response.status_code == 200
     response = client.get(f"/blog/{creation.json['id']}")
     assert response.status_code == 404
+    response = client.get(f"/blog/")
+    assert response.status_code == 200
+    assert response.json == {"posts": []}
+
+
+def test_non_existing_delete_blog_post(client):
+    response = client.delete(f"/blog/1337")
+    assert response.status_code == 404
