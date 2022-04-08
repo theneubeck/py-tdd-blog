@@ -115,3 +115,5 @@ def test_delete_blog_post(client):
     creation = create_blog_post(client, {"title": "Delete me", "body": valid_body})
     response = client.delete(f"/blog/{creation.json['id']}")
     assert response.status_code == 200
+    response = client.get(f"/blog/{creation.json['id']}")
+    assert response.status_code == 404
