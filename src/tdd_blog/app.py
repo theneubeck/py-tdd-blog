@@ -93,3 +93,19 @@ def edit_blog_post_by_id(id: str):
         write_to_db(id, body)
 
     return {"error": "method not allowed"}, 406
+
+@bp.route(
+    "/post/<id>/comments",
+    methods=("POST", "GET",)
+)
+def create_post_comment(id: str):
+    post = db.get(id)
+    if request.method == "POST":
+        body = request.json
+        if not body["comment"]:
+            return {}, 400
+        post["comments"] = post.get("comments", [])
+        post["comments"].append(body)
+        write_to_db(id, post)
+        return {}, 201
+    return {"comments": post.get("comments", [])}, 200

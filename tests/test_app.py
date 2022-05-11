@@ -125,3 +125,23 @@ def test_delete_blog_post(client):
 def test_non_existing_delete_blog_post(client):
     response = client.delete(f"/blog/1337")
     assert response.status_code == 404
+
+
+def test_add_comment_to_post(client):
+    creation = create_blog_post(client, {"title": "Comment me", "body": valid_body})
+    comment = {"comment": "I am a commentator, yes I am"}
+    response = client.post(f"/blog/post/{creation.json['id']}/comments", json=comment)
+    assert response.status_code == 201
+    response = client.get(f"/blog/post/{creation.json['id']}/comments")
+    assert response.status_code == 200
+    assert response.json["comments"] == [comment]
+
+
+def test_add_empty_comment_to_post(client):
+    creation = create_blog_post(client, {"title": "Comment me", "body": valid_body})
+    comment = {"comment": ""}
+    response = client.post(f"/blog/post/{creation.json['id']}/comments", json=comment)
+    assert response.status_code == 400
+    response = client.get(f"/blog/post/{creation.json['id']}/comments")
+    assert response.status_code == 200
+    assert response.json["comments"] == []
