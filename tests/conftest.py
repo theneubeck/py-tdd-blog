@@ -1,5 +1,4 @@
 import pytest
-
 from tdd_blog import create_app
 from tdd_blog import db as database
 

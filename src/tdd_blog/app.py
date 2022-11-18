@@ -11,4 +11,4 @@ bp = Blueprint("blog", __name__, url_prefix="/blog")
     methods=("GET",),
 )
 def blog_post():
-    return {"posts": [{"title": "My first POST"}]}, 200
+    return {"ok": True}, 200
