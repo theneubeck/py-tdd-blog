@@ -22,3 +22,8 @@ def test_create_post_2(client):
     assert response2.json["id"] == response.json["id"]
     assert response2.json["title"] == data["title"]
     assert response2.json["body"] == data["body"]
+
+
+def test_get_unexisting_blog_post(client):
+    response = client.get(f"/posts/id_that_does_not_exist")
+    assert response.status_code == 404
