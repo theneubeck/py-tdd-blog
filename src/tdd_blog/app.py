@@ -18,4 +18,8 @@ def blog_post():
     methods=("GET",),
 )
 def get_blog(id: int):
-    return {"id": "apa"}, 200
+    return {
+        "id": "apa",
+        "title": "First Post",
+        "body": "Informative body",
+    }, 200
