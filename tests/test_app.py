@@ -39,8 +39,12 @@ def test_get_all_blog_posts(client):
 
 
 def test_get_post_from_start_page(client):
-    response = create_blog_post(client, "new_blog_post", "body")
+    title = "new_blog_post"
+    body = "body"
+    response = create_blog_post(client, title, body)
     response2 = client.get(f"/posts")
     assert response2.status_code == 200
     blog_posts = response2.json["posts"]
-    assert response["id"] in [post["id"] for post in blog_posts]
+    assert response.json["id"] in [post["id"] for post in blog_posts]
+    post = [post for post in blog_posts if post["id"] == response.json["id"]][0]
+    assert post["title"] == title
