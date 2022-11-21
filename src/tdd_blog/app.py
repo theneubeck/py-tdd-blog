@@ -14,6 +14,9 @@ bp = Blueprint("blog", __name__, url_prefix="")
     methods=("GET", "POST"),
 )
 def blog_post():
+    if request.method == "GET":
+        return {}, 200
+
     payload = request.json
     post_id = str(uuid.uuid4())
     db.set(post_id, payload)
