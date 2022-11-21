@@ -34,5 +34,13 @@ def test_get_unexisting_blog_post(client):
 
 
 def test_get_all_blog_posts(client):
-    response = client.get(f"/posts")
+    response = client.get("/posts")
     assert response.status_code == 200
+
+
+def test_get_post_from_start_page(client):
+    response = create_blog_post(client, "new_blog_post", "body")
+    response2 = client.get(f"/posts")
+    assert response2.status_code == 200
+    blog_posts = response2.json["posts"]
+    assert response["id"] in [post["id"] for post in blog_posts]
