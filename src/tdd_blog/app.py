@@ -25,6 +25,8 @@ def blog_post():
 )
 def get_blog(id: str):
     post = db.get(id)
+    if not post:
+        return {}, 404
     return {
         "id": id,
         **post
