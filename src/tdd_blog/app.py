@@ -16,7 +16,7 @@ def validate_blogpost(blog_post: Dict) -> bool:
         return False
     if not blog_post.get("body"):
         return False
-    if not blog_post.get("title"):
+    if (not (title := blog_post.get("title"))) or len(title) < 5:
         return False
     return True
 
