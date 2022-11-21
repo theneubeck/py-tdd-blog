@@ -12,7 +12,11 @@ bp = Blueprint("blog", __name__, url_prefix="")
 
 
 def validate_blogpost(blog_post: Dict) -> bool:
-    return bool(blog_post)
+    if not blog_post:
+        return False
+    if "body" not in blog_post:
+        return False
+    return True
 
 
 
