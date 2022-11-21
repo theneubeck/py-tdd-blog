@@ -7,8 +7,8 @@ bp = Blueprint("blog", __name__, url_prefix="")
 
 
 @bp.route(
-    "/",
-    methods=("GET",),
+    "/posts",
+    methods=("GET", "POST"),
 )
 def blog_post():
     return {"ok": True}, 200
