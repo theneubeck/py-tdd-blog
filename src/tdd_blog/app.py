@@ -1,12 +1,19 @@
 import functools
+import http
 import json
 import uuid
+from typing import Dict
 
 from flask import Blueprint, jsonify, request
 
 from tdd_blog import db
 
 bp = Blueprint("blog", __name__, url_prefix="")
+
+
+def validate_blogpost(blog_post: Dict) -> bool:
+    return bool(blog_post)
+
 
 
 @bp.route(
@@ -18,6 +25,8 @@ def blog_post():
         return {"posts": [{"id": _id, **post} for _id, post in db.items()]}, 200
 
     payload = request.json
+    if not validate_blogpost(payload):
+        return {}, http.HTTPStatus.BAD_REQUEST
     post_id = str(uuid.uuid4())
     db.set(post_id, payload)
     return {"id": post_id}, 200
