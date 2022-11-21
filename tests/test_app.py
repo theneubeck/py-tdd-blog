@@ -12,6 +12,11 @@ def test_create_blog_post_without_body(client):
     assert r.status_code == 400
 
 
+def test_create_blog_post_with_empty_body(client):
+    r = client.post("/posts", json={"title": "title", "body": ""})
+    assert r.status_code == 400
+
+
 def test_create_post_1(client):
     data = {"title": "First Post", "body": "Informative body"}
     response = client.post("/posts", json=data)
