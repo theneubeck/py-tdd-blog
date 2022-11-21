@@ -1,7 +1,10 @@
 import functools
 import json
+import uuid
 
 from flask import Blueprint, jsonify, request
+
+from tdd_blog import db
 
 bp = Blueprint("blog", __name__, url_prefix="")
 
@@ -11,15 +14,18 @@ bp = Blueprint("blog", __name__, url_prefix="")
     methods=("GET", "POST"),
 )
 def blog_post():
-    return {"id": "apa"}, 200
+    payload = request.json
+    post_id = str(uuid.uuid4())
+    db.set(post_id, payload)
+    return {"id": post_id}, 200
 
 @bp.route(
     "/posts/<id>",
     methods=("GET",),
 )
-def get_blog(id: int):
+def get_blog(id: str):
+    post = db.get(id)
     return {
-        "id": "apa",
-        "title": "First Post",
-        "body": "Informative body",
+        "id": id,
+        **post
     }, 200
