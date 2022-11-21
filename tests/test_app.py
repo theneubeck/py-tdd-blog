@@ -2,6 +2,11 @@ def create_blog_post(client, title: str, body: str):
     return client.post("/posts", json={"title": title, "body": body})
 
 
+def test_create_empty_blog_post(client):
+    r = client.post("/posts", json={})
+    assert r.status_code == 400
+
+
 def test_create_post_1(client):
     data = {"title": "First Post", "body": "Informative body"}
     response = client.post("/posts", json=data)
@@ -36,6 +41,7 @@ def test_get_unexisting_blog_post(client):
 def test_get_all_blog_posts(client):
     response = client.get("/posts")
     assert response.status_code == 200
+    assert response.json["posts"] == []
 
 
 def test_get_post_from_start_page(client):
@@ -48,3 +54,4 @@ def test_get_post_from_start_page(client):
     assert response.json["id"] in [post["id"] for post in blog_posts]
     post = [post for post in blog_posts if post["id"] == response.json["id"]][0]
     assert post["title"] == title
+    assert post["body"] == body
