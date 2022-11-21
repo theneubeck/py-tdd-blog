@@ -3,7 +3,7 @@ import json
 
 from flask import Blueprint, jsonify, request
 
-bp = Blueprint("blog", __name__, url_prefix="/blog")
+bp = Blueprint("blog", __name__, url_prefix="")
 
 
 @bp.route(
