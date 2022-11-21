@@ -1,3 +1,7 @@
+def create_blog_post(client, title: str, body: str):
+    return client.post("/posts", json={"title": title, "body": body})
+
+
 def test_create_post_1(client):
     data = {"title": "First Post", "body": "Informative body"}
     response = client.post("/posts", json=data)
@@ -27,3 +31,8 @@ def test_create_post_2(client):
 def test_get_unexisting_blog_post(client):
     response = client.get(f"/posts/id_that_does_not_exist")
     assert response.status_code == 404
+
+
+def test_get_all_blog_posts(client):
+    response = client.get(f"/posts")
+    assert response.status_code == 200
