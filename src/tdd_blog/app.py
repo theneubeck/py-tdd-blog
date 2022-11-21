@@ -16,6 +16,8 @@ def validate_blogpost(blog_post: Dict) -> bool:
         return False
     if not blog_post.get("body"):
         return False
+    if not blog_post.get("title"):
+        return False
     return True
 
 
