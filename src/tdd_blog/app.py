@@ -12,3 +12,10 @@ bp = Blueprint("blog", __name__, url_prefix="")
 )
 def blog_post():
     return {"id": "apa"}, 200
+
+@bp.route(
+    "/posts/<id>",
+    methods=("GET",),
+)
+def get_blog(id: int):
+    return {"id": "apa"}, 200
